@@ -29,17 +29,17 @@ public class BoxController : ControllerBase
         };
     }
 
-    [HttpGet]
-    [Route("/api/boxes/{id}")]
-    public ResponseDto GetBoxById()
-    {
-        HttpContext.Response.StatusCode = StatusCodes.Status302Found;
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully found box with given id.",
-            ResponseData = _boxService.GetBoxesForFeed()
-        };
-    }
+    // [HttpGet]
+    // [Route("/api/boxes/{id}")]
+    // public ResponseDto GetBoxById()
+    // {
+    //     HttpContext.Response.StatusCode = StatusCodes.Status302Found;
+    //     return new ResponseDto()
+    //     {
+    //         MessageToClient = "Successfully found box with given id.",
+    //         ResponseData = _boxService.GetBoxesForFeed()
+    //     };
+    // }
 
     [HttpPost]
     [ValidateModel]
@@ -62,16 +62,21 @@ public class BoxController : ControllerBase
         HttpContext.Response.StatusCode = StatusCodes.Status201Created;
         return new ResponseDto()
         {
-            MessageToClient = "Successfully updated book.",
-            ResponseData = _boxService.UpdateBox(dto.Id, dto.Volume, dto.Name, dto.Color, dto.Description)
+            MessageToClient = "Successfully updated box.",
+            ResponseData = _boxService.UpdateBox(boxId, dto.Volume, dto.Name, dto.Color, dto.Description)
         };
     }
 
     [HttpDelete]
-    [Route("/api/DeleteBox")]
-    public object DeleteBox()
+    [Route("/api/DeleteBox/{id}")]
+    public ResponseDto DeleteBox([FromRoute] int id)
     {
-        return null;
+        HttpContext.Response.StatusCode = StatusCodes.Status200OK;
+        _boxService.DeleteBox(id);
+        return new ResponseDto()
+        {
+            MessageToClient = "Successfully deleted box."
+        };
     }
 }
 

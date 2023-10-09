@@ -1,0 +1,10 @@
+﻿name: api test postman
+on:
+  push:
+    branch:
+      - main
+  pull_request: 
+    branch:
+      - '*'
+jobs:
+  build: 

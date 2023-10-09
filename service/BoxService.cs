@@ -8,7 +8,7 @@ namespace service;
 public class BoxService
 {
     private readonly BoxRepository _boxRepository;
-    
+
     public BoxService(BoxRepository boxRepository)
     {
         _boxRepository = boxRepository;
@@ -21,21 +21,18 @@ public class BoxService
 
     public object CreateBox(int volume, string name, string color, string description)
     {
-        if (true)
-        {
-            return _boxRepository.CreateBox(volume, name, color, description);
-        }
-
-        throw new ValidationException("Box with the name "+ name +" already exists.");
+        return _boxRepository.CreateBox(volume, name, color, description);
     }
 
-    public Box UpdateBox(int id, int volume, string name, string color, string description)
+    public object UpdateBox(int id, int volume, string name, string color, string description)
     {
         return _boxRepository.UpdateBox(id, volume, name, color, description);
     }
 
     public void DeleteBox(int id)
     {
-        _boxRepository.DeleteBox(id);
+        var result = _boxRepository.DeleteBox(id);
+        if (!result)
+            throw new Exception("Could not delete box");
     }
 }
