@@ -1,0 +1,258 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+
+
+
+/*-----------------------------Main-Elements--------------------------------*/
+:root{
+  --light-color: #c2c2c2;
+  --white-color: #f8f8f8;
+  --dark-color: #494949;
+  --background-color: #232323;
+  --highlight-color: #275dc0;
+  --box-color: #2d2a28;
+  --box-color-light: #7e746e;
+  --box-effect-color: #14a7e0;
+  --font-style: "Courier New", cursive;
+  --button-width: 150px;
+}
+
+body {
+  background-color: var(--background-color)
+}
+h1{
+  cursor: default;
+  display: flex;
+  justify-content: center;
+}
+hr{
+  background-color: var(--white-color);
+}
+.menu-buttons{
+  color: var(--light-color);
+  align-content: center;
+  cursor: pointer;
+  background-color: var(--dark-color);
+  border-color: var(--light-color);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  position: absolute;
+  font-size: 16px;
+  font-family: var(--font-style);
+  font-weight: bold;
+  width: var(--button-width);
+  top: 60px;
+  right: 70px;
+}
+.menu-buttons:hover{
+  color: var(--highlight-color);
+  border-color: var(--highlight-color);
+  box-shadow: 5px 5px 5px black;
+  transition: .2s;
+  transform: translateY(-2px) translateX(-2px);
+  background-color: var(--light-color);
+}
+.menu-buttons:active{
+  box-shadow: none;
+  background-color: var(--dark-color);
+  transition: .2s;
+  transform: translateY(2px) translateX(2px);
+}
+.main-container{
+  margin-left: 40px;
+  margin-right: 40px;
+  right: 40px;
+  padding: 40px;
+  justify-content: center;
+}
+.button-container{
+  width: 150px;
+  position: relative;
+}
+/*-----------------------------Box-Elements--------------------------------*/
+.box{
+  background-color: var(--box-color);
+  height: 250px;
+  width: 500px;
+  margin: 20px;
+  border: solid var(--light-color);
+  border-width: 1px;
+  border-radius: 7px;
+  color: var(--white-color);
+  position: relative;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: default;
+}
+.box:before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--box-effect-color);
+  clip-path: circle(200px at 20% 30%);
+  transition: 0.5s ease-in-out;
+}
+.box:hover:before{
+  clip-path: circle(300px at 80% 80%);
+}
+.box:after{
+  position: absolute;
+  top: 30%;
+  left: -20%;
+  font-weight: bold;
+  color: var(--dark-color);
+}
+.box .name{
+  position: absolute;
+  top: -100px;
+  left: -200px;
+  width: 200px;
+  padding-left: 100%;
+  justify-content: left;
+  font-weight: bold;
+  transition: 0.4s ease-in-out;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.box:hover .name{
+  left: 50px;
+  top: -130px;
+  justify-content: right;
+  transition: 0.4s ease-in-out;
+}
+
+.box-content{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+.property-content{
+  position: absolute;
+  font-weight: bold;
+  text-align: right;
+  transform: translate(70%, -30%);
+  width: 200px;
+  height: 100px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s ease-in-out;
+}
+.box:hover .property-content{
+  transform: translate(18% ,-30%);
+  opacity: 1;
+  visibility: visible;
+  transition: 0.4s ease-in-out;
+}
+.menu-buttons{
+  font-size: 14px;
+  font-weight: bold;
+  transform: translate(150%);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s ease-in-out;
+
+}
+.box .menu-buttons:hover{
+  color: var(--dark-color);
+  box-shadow: 2px 2px 5px black;
+}
+.box:hover .menu-buttons:active{
+  transform: translate(2px, 2px);
+  transition: 0.2s ease-in-out;
+  color: var(--light-color);
+  box-shadow: none;
+}
+.box:hover .menu-buttons{
+  transform: translate(0);
+  opacity: 1;
+  visibility: visible;
+  transition: 0.4s ease-in-out;
+}
+.buttons{
+  height: 100%;
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+}
+.box-design p{
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/*-----------------------------Search-&-ID-Elements--------------------------------*/
+#box-container{
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+#content-container{
+  position: relative;
+}
+#search-container{
+  display: flex;
+  justify-content: center;
+
+}
+#search-bar{
+  position: relative;
+  width: 30%;
+  background-color: var(--dark-color);
+  border: solid var(--box-color-light);
+  border-width: 1px;
+  border-radius: 2px;
+  color: var(--light-color);
+  padding: 0 5px 0 5px;
+}
+#search-button{
+  margin-left: 5px;
+  background-color: var(--dark-color);
+  border: solid var(--box-color-light);
+  border-width: 1px;
+  border-radius: 2px;
+  color: var(--light-color);
+  transition: .2s;
+}
+#search-button:hover{
+  transform: translateY(-1px) translateX(-1px);
+  box-shadow: 2px 2px 5px black;
+}
+#search-button:active{
+  transform: translateY(1px) translateX(1px);
+  box-shadow: none;
+}

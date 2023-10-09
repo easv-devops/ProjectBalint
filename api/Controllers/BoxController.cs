@@ -21,7 +21,7 @@ public class BoxController : ControllerBase
     [Route("/api/boxes")]
     public ResponseDto GetAllBoxes()
     {
-        HttpContext.Response.StatusCode = StatusCodes.Status302Found;
+        HttpContext.Response.StatusCode = 200;
         return new ResponseDto()
         {
             MessageToClient = "Successfully fetched all boxes.",
@@ -80,21 +80,6 @@ public class BoxController : ControllerBase
     }
 }
 
-
-
-public record Box
-{
-    public int Id { get; set; }
-    public int Volume { get; set; }
-    public string Name { get; set; }
-    public string Color { get; set; }
-    public string Description { get; set; }
-
-    public override string ToString()
-    {
-        return $"{{ Name = {Name} }}";
-    }
-}
 
 
 
