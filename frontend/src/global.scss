@@ -241,6 +241,7 @@ hr{
 }
 #search-button{
   margin-left: 5px;
+  padding: 5px;
   background-color: var(--dark-color);
   border: solid var(--box-color-light);
   border-width: 1px;
@@ -255,4 +256,7 @@ hr{
 #search-button:active{
   transform: translateY(1px) translateX(1px);
   box-shadow: none;
+}
+#edit-button{
+  left: 70px;
 }

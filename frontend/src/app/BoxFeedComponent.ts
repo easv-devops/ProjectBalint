@@ -6,6 +6,7 @@ import {Box, ResponseDto} from "../models";
 import {State} from "../state";
 import {ModalController, ToastController} from "@ionic/angular";
 import {CreateBoxComponent} from "./CreateBoxComponent";
+import {EditBoxComponent} from "./EditBoxComponent";
 
 @Component({
   template: `
@@ -27,16 +28,17 @@ import {CreateBoxComponent} from "./CreateBoxComponent";
                 <div class="box-properties">
                   <p>Id: {{box.id}}</p>
                   <span>Volume: {{box.volume}}</span>
+
                 </div>
 
                 <div class="box-design">
-                  <span>Color: </span>
-                  <p>{{box.color}}</p>
+                  <span>Color: {{box.color}}</span>
                 </div>
               </div>
 
               <div class="buttons">
-                <button class="menu-buttons" (click)="deleteBox(box.id)">Delete</button>
+                <button class="menu-buttons" id="delete-button" (click)="deleteBox(box.id)">Delete</button>
+                <button class="menu-buttons" id="edit-button" (click)="openEditModal(box)">Edit</button>
               </div>
             </div>
           </div>
@@ -98,4 +100,11 @@ export class BoxFeedComponent implements OnInit {
     });
     modal.present();
   }
+  async openEditModal(selectedBox: Box) {
+    const modal = await this.modalController.create({
+      component: EditBoxComponent
+    });
+    modal.present();
+  }
+
 }
