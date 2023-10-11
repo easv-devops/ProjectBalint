@@ -13,8 +13,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 302 (Found)\", function(){\r",
-							"    pm.response.to.have.status(302);\r",
+							"pm.test(\"Status code is 200 (Found)\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"pm.environment.get(\"variable_key\");"
 						],
