@@ -7,6 +7,7 @@ import {State} from "../state";
 import {ModalController, ToastController} from "@ionic/angular";
 import {CreateBoxComponent} from "./CreateBoxComponent";
 import {EditBoxComponent} from "./EditBoxComponent";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   template: `
@@ -15,8 +16,8 @@ import {EditBoxComponent} from "./EditBoxComponent";
     <div class="main-container">
       <div id="content-container">
         <div id="search-container">
-          <input type="text" id="search-bar">
-          <button id="search-button">Search</button>
+          <input type="text" [formControl]="searchTerm.controls.searchValue" id="search-bar">
+          <button id="search-button" (click)="searchForBox()">Search</button>
         </div>
 
         <div id="box-container">
@@ -58,9 +59,12 @@ import {EditBoxComponent} from "./EditBoxComponent";
 
 export class BoxFeedComponent implements OnInit {
   constructor(public http: HttpClient, public modalController: ModalController,
-              public state: State, public toastController : ToastController) {
+              public state: State, public toastController: ToastController, public fb: FormBuilder) {
 
   }
+  searchTerm = this.fb.group({
+    searchValue: []
+  })
 
   async fetchBoxes() {
     const result = await firstValueFrom<ResponseDto<Box[]>>(this.http.get(environment.baseURL + '/api/boxes'))
@@ -108,4 +112,20 @@ export class BoxFeedComponent implements OnInit {
     modal.present();
   }
 
+  searchForBox() {
+    var searchingFor= this.searchTerm.controls.searchValue.value!;
+    if ((searchingFor === null || searchingFor === "")){
+      this.fetchBoxes();
+    }else {
+      // @ts-ignore
+      this.state.boxes = this.state.boxes.filter(box => box.name?.toUpperCase() == searchingFor.toUpperCase())
+      if (this.state.boxes.length == 0)
+        {
+          this.fetchBoxes().then(()=>{
+            // @ts-ignore
+            this.state.boxes = this.state.boxes.filter(box => box.id.toString() === searchingFor)
+          })
+        }
+    }
+  }
 }
