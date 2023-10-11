@@ -6,4 +6,5 @@ import {Box} from "./models";
 })
 export class State {
   boxes: Box[] = [];
+  currentBox: Box = {};
 }

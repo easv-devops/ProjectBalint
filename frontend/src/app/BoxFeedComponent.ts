@@ -101,6 +101,7 @@ export class BoxFeedComponent implements OnInit {
     modal.present();
   }
   async openEditModal(selectedBox: Box) {
+    this.state.currentBox = selectedBox;
     const modal = await this.modalController.create({
       component: EditBoxComponent
     });
