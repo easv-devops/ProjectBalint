@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
-using BoxFactory.TransferModels;
+using BeeProject.TransferModels;
 
-namespace BoxFactory.Middleware;
+namespace BeeProject.Middleware;
 
 public class GlobalExceptionHandler
 {

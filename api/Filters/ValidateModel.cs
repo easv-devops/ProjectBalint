@@ -1,8 +1,8 @@
-﻿using BoxFactory.TransferModels;
+﻿using BeeProject.TransferModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace BoxFactory.Filters;
+namespace BeeProject.Filters;
 
 public class ValidateModel : ActionFilterAttribute
 {

@@ -1,4 +1,4 @@
-﻿namespace BoxFactory.TransferModels;
+﻿namespace BeeProject.TransferModels;
 
 public class ResponseDto
 {
