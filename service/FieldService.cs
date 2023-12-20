@@ -17,6 +17,10 @@ public class FieldService
         return _fieldRepository.GetAllFields();
     }
 
+    public IEnumerable<Account_FieldQuery> GetAllAccountFieldConnections()
+    {
+        return _fieldRepository.GetAllAccountFieldConnections();
+    }
     public int CreateField(string fieldName, string fieldLocation)
     {
         var result = _fieldRepository.CreateField(fieldName, fieldLocation);
@@ -44,6 +48,8 @@ public class FieldService
             ? fieldIds.Select(id => _fieldRepository.GetFieldById(id)!).ToList()
             : Enumerable.Empty<FieldQuery>();
     }
+    //TODO: placeholder, optimize later
+    
 
     public bool ConnectFieldAndAccount(int accountId, int fieldId)
     {

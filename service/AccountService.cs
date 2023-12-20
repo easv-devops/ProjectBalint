@@ -20,6 +20,11 @@ public class AccountService
         return _accountRepository.GetAllAccounts();
     }
 
+    public IEnumerable<AccountSafeQuery> GetAccountNamesForRank(AccountRank rank)
+    {
+        return _accountRepository.GetAccountNamesForRank((int)rank);
+    }
+
     //TODO: global exception handler
     public int CreateAccount(string accountName, string accountEmail, string accountPassword, AccountRank accountRank)
     {
@@ -53,5 +58,18 @@ public class AccountService
             return _tokenService.GenerateToken(account);
         }
         return null!;
+    }
+    public IEnumerable<AccountSafeQuery> GetAccountsForField(int fieldId)
+    {
+        var accountIds = _accountRepository.GetAccountsForField(fieldId).ToArray();
+
+        return accountIds.Length != 0
+            ? accountIds.Select(id => _accountRepository.GetAccountById(id)).ToList()
+            : Enumerable.Empty<AccountSafeQuery>();
+    }
+
+    public bool ModifyRank(int accountId, int rank)
+    {
+        return _accountRepository.ModifyAccountRank(accountId, rank);
     }
 }

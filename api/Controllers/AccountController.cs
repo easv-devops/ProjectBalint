@@ -1,57 +1,80 @@
+using BeeProject.Config;
 using BeeProject.Filters;
 using BeeProject.TransferModels;
 using BeeProject.TransferModels.CreateRequests;
 using BeeProject.TransferModels.UpdateRequests;
 using infrastructure.DataModels.Enums;
 using infrastructure.QueryModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using service;
 
-namespace BeeProject.Controllers;
-
-public class AccountController : ControllerBase
+namespace BeeProject.Controllers
 {
-    private readonly AccountService _accountService;
-
-    public AccountController(AccountService accountService)
+    public class AccountController : ControllerBase
     {
-        _accountService = accountService;
-    }
+        private readonly AccountService _accountService;
 
-    [HttpGet]
-    [Route("/api/getAccounts")]
-    public ResponseDto GetAllAccounts()
-    {
-        return new ResponseDto()
+        public AccountController(AccountService accountService)
         {
-            MessageToClient = "Successfully fetched all accounts.",
-            ResponseData = _accountService.GetAllAccounts()
-        };
-    }
-
-    [HttpPost]
-    [ValidateModel]
-    [Route("/api/createAccount")]
-    public ResponseDto CreateAccount([FromBody] CreateAccountRequestDto dto)
-    {
-        return new ResponseDto()
+            _accountService = accountService;
+        }
+        private bool IsUrlAllowed(string url)
         {
-            MessageToClient = "Successfully created a account.",
-            ResponseData = _accountService.CreateAccount(dto.Name, dto.Email, dto.Password,
-                (AccountRank)Enum.ToObject(typeof(AccountRank), dto.Rank))
-        };
-    }
+            return Whitelist.AllowedUrls.Any(url.StartsWith);
+        }
 
-    [HttpPut]
-    [ValidateModel]
-    [Route("/api/updateAccount")]
-    public ResponseDto UpdateAccount([FromBody] UpdateAccountRequestDto dto)
-    {
-        var userRankClaim = User.Claims.FirstOrDefault(c => c.Type == "rank")?.Value; //receives null, fix later, most likely cors problem (will not be present in live env)
-        //Console.WriteLine(userRankClaim);
-        if (true )//!string.IsNullOrEmpty(userRankClaim) && IsAllowedToDeleteAccount(userRankClaim)) [develop later]
+        private ResponseDto HandleInvalidRequest()
         {
+            return new ResponseDto()
+            {
+                MessageToClient = "Invalid request.",
+                ResponseData = null
+            };
+        }
+
+        private ResponseDto ValidateAndProceed<T>(Func<T> action, string successMessage)
+        {
+            if (!IsUrlAllowed(Request.Headers["Referer"]))
+            {
+                return HandleInvalidRequest();
+            }
+
+            return new ResponseDto()
+            {
+                MessageToClient = $"Successfully {successMessage}.",
+                ResponseData = action.Invoke()
+            };
+        }
+
+        [HttpGet]
+        [Route("/api/getAccounts")]
+        public ResponseDto GetAllAccounts()
+        {
+            return ValidateAndProceed(() => _accountService.GetAllAccounts(), "fetched all accounts");
+        }
+
+        [HttpGet]
+        [Route("/api/getAccountsForField/{id:int}")]
+        public ResponseDto GetAccountsForField([FromRoute] int id)
+        {
+            return ValidateAndProceed(() => _accountService.GetAccountsForField(id), "fetched all accounts for field");
+        }
+
+        [HttpPost]
+        [ValidateModel]
+        [Route("/api/createAccount")]
+        public ResponseDto CreateAccount([FromBody] CreateAccountRequestDto dto)
+        {
+            return ValidateAndProceed(() => _accountService.CreateAccount(dto.Name, dto.Email, dto.Password, (AccountRank)Enum.ToObject(typeof(AccountRank), dto.Rank)), "created an account");
+        }
+
+        [HttpPut]
+        [ValidateModel]
+        [Route("/api/updateAccount")]
+        public ResponseDto UpdateAccount([FromBody] UpdateAccountRequestDto dto)
+        {
+            var userRankClaim = User.Claims.FirstOrDefault(c => c.Type == "rank")?.Value;
+
             var account = new AccountQuery
             {
                 Id = dto.Id,
@@ -66,52 +89,33 @@ public class AccountController : ControllerBase
                 MessageToClient = "Successfully updated account.",
             };
         }
-        else
-        {
-            return new ResponseDto()
-            {
-                MessageToClient = "You're not authorized to update this account."
-            };
-        }
-    }
 
-    //TODO: change to safe later
-    [HttpDelete]
-    [Route("/api/DeleteAccount/{id:int}")]
-    public ResponseDto DeleteAccount([FromRoute] int id)
-    {
-        //var userRankClaim = User.Claims.FirstOrDefault(c => c.Type == "rank")?.Value;
+        [HttpDelete] 
+        [Route("/api/DeleteAccount/{id:int}")]
+        public ResponseDto DeleteAccount([FromRoute] int id)
+        {
+            return ValidateAndProceed<ResponseDto>(() => { _accountService.DeleteAccount(id); return null; }, "deleted account");
+        }
+
+        [HttpPut]
+        [Route("/api/checkPassword")]
+        public ResponseDto CheckPassword([FromBody] CredentialCheckRequestDto dto)
+        {
+            return ValidateAndProceed(() => _accountService.CheckCredentials(dto.Username, dto.Password), "checked passwords");
+        }
+
+        [HttpGet]
+        [Route("/api/getManagers")]
+        public ResponseDto GetManagers()
+        {
+            return ValidateAndProceed(() => _accountService.GetAccountNamesForRank(AccountRank.FieldManager), "retrieved all managers");
+        }
         
-        if (true)//!string.IsNullOrEmpty(userRankClaim) && IsAllowedToDeleteAccount(userRankClaim))
+        [HttpPut]
+        [Route("/api/modifyRank")]
+        public ResponseDto ModifyAccountRank([FromBody] AccountRankUpdateDto dto)
         {
-            _accountService.DeleteAccount(id);
-            return new ResponseDto()
-            {
-                MessageToClient = "Successfully deleted account."
-            };
+            return ValidateAndProceed(() => _accountService.ModifyRank(dto.AccountId, dto.Rank), "updated Rank");
         }
-        else
-        {
-            return new ResponseDto()
-            {
-                MessageToClient = "You're not authorized to delete this account."
-            };
-        }
-    }
-
-    private bool IsAllowedToDeleteAccount(string userRankClaim)
-    {
-        return true;
-    }
-
-    [HttpPut]
-    [Route("/api/checkPassword")]
-    public ResponseDto CheckPassword([FromBody] CredentialCheckRequestDto dto)
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully checked passwords.",
-            ResponseData = _accountService.CheckCredentials(dto.Username, dto.Password)
-        };
     }
 }

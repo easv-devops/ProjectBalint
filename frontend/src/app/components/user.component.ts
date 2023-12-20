@@ -19,9 +19,9 @@ import {ToastController} from "@ionic/angular";
         </div>
         <div id="interface-middle">
           <p>Username:</p>
-          <input  type="text" class="text-bar" id="username-bar" [formControl]="updateForm.controls.username">
+          <input type="text" class="text-bar" id="username-bar" [formControl]="updateForm.controls.username">
           <p>Email:</p>
-          <input  type="text" class="text-bar" id="email-bar" [formControl]="updateForm.controls.email">
+          <input type="text" class="text-bar" id="email-bar" [formControl]="updateForm.controls.email">
 
 
           <!-- Password -->
@@ -35,15 +35,17 @@ import {ToastController} from "@ionic/angular";
 
           <!-- Repeat Password -->
           <p>Repeat Password:</p>
-          <input type="password" class="text-bar" id="password-repeat-bar" [formControl]="updateForm.controls.repeatPassword"
+          <input type="password" class="text-bar" id="password-repeat-bar"
+                 [formControl]="updateForm.controls.repeatPassword"
                  [ngClass]="{'red-border': updateForm.controls.repeatPassword.touched && updateForm.controls.repeatPassword.value !== updateForm.controls.password.value}">
-          <div *ngIf="updateForm.controls.repeatPassword.touched && updateForm.controls.repeatPassword.value !== updateForm.controls.password.value"
-               style="color: var(--red-color);">
+          <div
+              *ngIf="updateForm.controls.repeatPassword.touched && updateForm.controls.repeatPassword.value !== updateForm.controls.password.value"
+              style="color: var(--red-color);">
             Passwords do not match.
           </div>
         </div>
         <div id="interface-bottom">
-            <button id="save-button" (click)="save()">Save</button>
+          <button id="save-button" (click)="save()">Save</button>
         </div>
 
       </div>
@@ -77,7 +79,6 @@ export class UserComponent implements OnInit {
               public http: HttpClient) {
   }
   ngOnInit(): void {
-    console.log("user initialized");
 
     const token = this.tokenService.getToken();
 
@@ -117,9 +118,7 @@ export class UserComponent implements OnInit {
       const headers = {//leave in for later update
         Authorization: `Bearer ${this.tokenService.getToken()}`,
       };
-      console.log('Token:', headers.Authorization);
       try{
-        console.log(this.updateAccount);
         const response = await firstValueFrom(
           this.http.put<ResponseDto<boolean>>(
             environment.baseURL + '/api/updateAccount',

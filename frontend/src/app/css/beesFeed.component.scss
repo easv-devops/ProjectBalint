@@ -1,4 +1,4 @@
-#page-container{
+#page-container {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -6,14 +6,16 @@
   flex-direction: column;
   top: 0;
 }
-#top-bar{
+
+#top-bar {
   height: 15%;
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
-#user-background{
+
+#user-background {
   height: 70px;
   width: 70px;
   display: flex;
@@ -30,9 +32,11 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
-#user-background:hover{
+
+#user-background:hover {
   border-color: var(--green-color);
 }
+
 #warning-triangle {
   width: 0;
   height: 0;
@@ -51,7 +55,8 @@
   user-select: none;
   line-height: 62px;
 }
-#field-container{
+
+#field-container {
   height: 85%;
   width: 100%;
   position: relative;
@@ -60,12 +65,14 @@
   justify-content: center;
   overflow-y: scroll;
 }
-#user-container{
+
+#user-container {
   display: flex;
   cursor: default;
   user-select: none;
 }
-#user-controls{
+
+#user-controls {
   margin-left: 10px;
   font-weight: bold;
   font-size: 24px;
@@ -74,38 +81,45 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  #username{
+  #username {
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
     transition: 0.2s ease-in-out;
   }
-  #username:hover{
+
+  #username:hover {
     color: var(--green-color);
   }
 }
-#log-out{
+
+#log-out {
   font-size: 18px;
   line-height: 10px;
   margin-left: 20px;
   cursor: pointer;
 }
+
 #log-out:hover,
-#log-out:hover #out{
+#log-out:hover #out {
   color: var(--red-color);
 }
+
 #log-out:active,
-#log-out:active #out{
+#log-out:active #out {
   color: var(--grey-color);
 }
-#out{
+
+#out {
   color: var(--effect-color);
 }
 
 //-------------------------field-boxes---------------------------
-.field{
+.field {
   margin: 20px;
   padding: 10px;
+  min-height: 150px;
+  min-width: 300px;
   font-weight: bold;
   font-size: 18px;
   color: var(--dark-color);
@@ -118,6 +132,7 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .circle-background {
   position: absolute;
   top: 0;
@@ -127,19 +142,26 @@
   transform: translateX(-50%);
   background: radial-gradient(circle at 0 0, #ffffff 5%, transparent 5%);
 }
-.field-top{
+
+.field-top {
   display: flex;
   justify-content: space-between;
-  .p{
+
+  .p {
     margin: 0;
     padding: 0;
   }
 }
-.field-content{
+
+.field-content {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 100px;
 }
-.field-edit-button{
+
+.field-edit-button {
   height: 20px;
   width: 40px;
   color: var(--dark-color);
@@ -153,18 +175,21 @@
   line-height: 10px;
   transition: 0.2s ease-in-out;
 }
-.field-edit-button:hover{
+
+.field-edit-button:hover {
   background-color: var(--dark-color);
   color: var(--white-color);
 }
-.field-edit-button:active{
+
+.field-edit-button:active {
   background-color: var(--white-color);
   color: var(--dark-color);
 }
+
 //-------------------------field-boxes-end--------------------------
 
 //-------------------------hive-boxes----------------------------
-.hive{
+.hive {
   background-color: var(--dark-color);
   height: 150px;
   width: 300px;
@@ -184,7 +209,8 @@
   padding-right: 10px;
   padding-bottom: 10px;
 }
-.hive:before{
+
+.hive:before {
   content: '';
   position: absolute;
   top: 0;
@@ -196,25 +222,29 @@
   transition: 0.5s ease-in-out;
   overflow: hidden;
 }
-.hive:hover:before{
+
+.hive:hover:before {
   clip-path: circle(120px at 90% 40%);
 }
-.hive:after{
+
+.hive:after {
   position: absolute;
   top: 30%;
   left: -20%;
   font-weight: bold;
   color: var(--dark-color);
 }
+
 //-------------------------box-contents--------------------------
-.hive-top, .hive-middle, .hive-bottom{
+.hive-top, .hive-middle, .hive-bottom {
   width: 50%;
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: 0.5s ease-in-out;
   display: flex;
 }
-.hive-name{
+
+.hive-name {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: bold;
@@ -223,29 +253,35 @@
   margin-bottom: 0;
   transition: 0.5s ease-in-out;
 }
-.hive-middle{
+
+.hive-middle {
   visibility: hidden;
   opacity: 0;
+  min-height: 100px;
 }
-.hive-bottom{
+
+.hive-bottom {
   transform: translateX(100%);
   visibility: hidden;
   opacity: 0;
   justify-content: flex-end;
 }
-.hive:hover{
-  .hive-top, .hive-middle{
+
+.hive:hover {
+  .hive-top, .hive-middle {
     transform: translateX(-90%);
     visibility: visible;
     opacity: 1;
   }
+
   .hive-bottom {
-    transform: translateX(0);
+    transform: translateX(0) translateY(-30px);
     visibility: visible;
     opacity: 1;
   }
 }
-.manage-hive-button{
+
+.manage-hive-button {
   width: 80px;
   height: 30px;
   border-width: 1px;
@@ -258,13 +294,16 @@
   font-size: 16px;
   transition: .2s;
 }
-.manage-hive-button:hover{
+
+.manage-hive-button:hover {
   box-shadow: 5px 5px 5px black;
   transform: translateY(-2px) translateX(-2px);
 }
-.manage-hive-button:active{
+
+.manage-hive-button:active {
   box-shadow: none;
   transform: translateY(2px) translateX(2px);
 }
+
 //-------------------------box-contents-end-------------------------
 //-------------------------hive-boxes-end---------------------------

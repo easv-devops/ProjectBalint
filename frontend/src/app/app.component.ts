@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <ion-app>
-      <router-outlet></router-outlet>
-    </ion-app>
-  `
+    selector: 'app-root',
+    template: `
+        <ion-app>
+            <router-outlet></router-outlet>
+        </ion-app>
+    `
 })
 export class AppComponent {
-  constructor() {}
+    constructor() {
+    }
 }

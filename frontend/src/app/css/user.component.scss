@@ -1,7 +1,7 @@
-#page-container{
+#page-container {
   height: 100%;
   width: 100%;
-  top:0;
+  top: 0;
   position: absolute;
   display: flex;
   align-items: center;
@@ -9,48 +9,46 @@
   flex-direction: row;
   font-size: 24px;
 }
-#interface{
+
+#interface {
   padding: 0 50px 20px 50px;
   background-color: var(--grey-color);
   border: var(--black-color) solid 2px;
   border-radius: 10px;
 }
-p{
+
+p {
   cursor: default;
 }
-#interface-top{
-  p{
-    cursor: pointer;
-    color: var(--red-color);
-    font-weight: bold;
-    width: 80px;
-    transition: .2s;
-    user-select: none;
-    transform: translateY(-10px) translateX(-30px);
-  }
-  p:hover{
-    transform: translateY(-12px) translateX(-32px);
-  }
-  p:active{
-    transform: translateY(-8px) translateX(-25px);
-  }
+#back-button{
+  transform: translateX(-25px) translateY(-5px);
 }
-#interface-middle{
+#back-button:hover{
+  transform: translateX(-27px) translateY(-7px);
+}
+#back-button:active{
+  transform: translateX(-25px) translateY(-5px);
+}
+
+#interface-middle {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  *{
+
+  * {
     margin-top: 0;
     margin-bottom: 10px;
   }
 }
-#interface-bottom{
+
+#interface-bottom {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-button{
+
+button {
   margin-top: 30px;
   padding: 10px;
   width: 100px;
@@ -63,16 +61,19 @@ button{
   font-size: 16px;
   background-color: var(--green-color);
 }
-button:hover{
+
+button:hover {
   box-shadow: 5px 5px 5px black;
   transition: .2s;
   transform: translateY(-2px) translateX(-2px);
 }
-button:active{
+
+button:active {
   box-shadow: none;
   transition: .2s;
   transform: translateY(2px) translateX(2px);
 }
-.red-border{
+
+.red-border {
   border-color: var(--red-color);
 }

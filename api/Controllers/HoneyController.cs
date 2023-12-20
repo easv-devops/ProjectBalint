@@ -1,4 +1,5 @@
-﻿using BeeProject.Filters;
+﻿using BeeProject.Config;
+using BeeProject.Filters;
 using BeeProject.TransferModels;
 using BeeProject.TransferModels.CreateRequests;
 using BeeProject.TransferModels.UpdateRequests;
@@ -17,59 +18,46 @@ public class HoneyController : ControllerBase
         _honeyService = honeyService;
     }
 
+    private bool IsUrlAllowed(string url) => Whitelist.AllowedUrls.Any(url.StartsWith);
+
+    private ResponseDto HandleInvalidRequest() => new ResponseDto { MessageToClient = "Invalid request.", ResponseData = null };
+
+    private ResponseDto ValidateAndProceed<T>(Func<T> action, string successMessage) =>
+        !IsUrlAllowed(Request.Headers["Referer"]) ? HandleInvalidRequest() : new ResponseDto { MessageToClient = $"Successfully {successMessage}.", ResponseData = action.Invoke() };
+
     [HttpGet]
     [Route("/api/getHoney")]
-    public ResponseDto GetAllHoneys()
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully fetched every honey.",
-            ResponseData = _honeyService.GetAllHoney()
-        };
-    }
+    public ResponseDto GetAllHoneys() =>
+        new ResponseDto { MessageToClient = "Successfully fetched every honey.", ResponseData = _honeyService.GetAllHoney() };
 
     [HttpPost]
     [ValidateModel]
     [Route("/api/createHoney")]
-    public ResponseDto CreateHoney([FromBody] CreateHoneyRequestDto dto)
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully created a honey.",
-            ResponseData = _honeyService.CreateHoney(dto.Harvest, dto.Name, dto.Liquid, dto.Flowers, dto.Moisture)
-        };
-    }
+    public ResponseDto CreateHoney([FromBody] CreateHoneyRequestDto dto) =>
+        new ResponseDto { MessageToClient = "Successfully created a honey.", ResponseData = _honeyService.CreateHoney(dto.Harvest, dto.Name, dto.Liquid, dto.Flowers, dto.Moisture) };
 
     [HttpPut]
     [ValidateModel]
     [Route("/api/updateHoney")]
-    public ResponseDto UpdateHoney([FromBody] UpdateHoneyRequestDto dto)
-    {
-        var honey = new HoneyQuery
+    public ResponseDto UpdateHoney([FromBody] UpdateHoneyRequestDto dto) =>
+        ValidateAndProceed<ResponseDto>(() =>
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            Liquid = dto.Liquid,
-            Harvest_id = dto.Harvest,
-            Moisture = dto.Moisture,
-            Flowers = dto.Flowers,
-        };
-        _honeyService.UpdateHoney(honey);
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully updated honey."
-        };
-    }
+            var honey = new HoneyQuery
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Liquid = dto.Liquid,
+                Harvest_id = dto.Harvest,
+                Moisture = dto.Moisture,
+                Flowers = dto.Flowers,
+            };
+            _honeyService.UpdateHoney(honey);
+            return null;
+        }, "updated honey");
 
-    //TODO: change to safe later
+    // TODO: change to safe later
     [HttpDelete]
     [Route("/api/DeleteHoney/{id:int}")]
-    public ResponseDto DeleteHoney([FromRoute] int id)
-    {
-        _honeyService.DeleteHoney(id);
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully deleted honey."
-        };
-    }
+    public ResponseDto DeleteHoney([FromRoute] int id) =>
+        ValidateAndProceed<ResponseDto>(() => { _honeyService.DeleteHoney(id); return null; }, "deleted honey");
 }

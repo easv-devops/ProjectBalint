@@ -1,17 +1,18 @@
 import {Component} from "@angular/core";
 import {FormBuilder, Validators} from "@angular/forms";
 import {firstValueFrom} from "rxjs";
-import {ResponseDto} from "../../models";
+import {Account, Field, ResponseDto} from "../../models";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {ToastController} from "@ionic/angular";
 import {State} from "../../state";
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {TokenService} from "../services/token.service";
+import {JwtService} from "../services/jwt.service";
 
 @Component({
   template: `
-    <div class="page-container">
+    <div id="page-container">
 
       <div id="content-container">
 
@@ -23,9 +24,11 @@ import {TokenService} from "../services/token.service";
 
         <div id="login-container">
           <p>Username</p>
-          <input type="text" class="text-bar" id="username-bar" [formControl]="loginForm.controls.username" (keydown.enter)="focusPasswordInput()">
+          <input type="text" class="text-bar" id="username-bar" [formControl]="loginForm.controls.username"
+                 (keydown.enter)="focusPasswordInput()">
           <p>Password</p>
-          <input type="password" class="text-bar" id="password-bar" [formControl]="loginForm.controls.password" (keydown.enter)="login()">
+          <input type="password" class="text-bar" id="password-bar" [formControl]="loginForm.controls.password"
+                 (keydown.enter)="login()">
           <div id="button-container">
             <button class="button" id="login-button" (click)="login()">Login</button>
             <button class="button" id="recover-button">Recover</button>
@@ -42,7 +45,7 @@ import {TokenService} from "../services/token.service";
 
   `,
   styleUrls: ['../css/login.component.scss'],
-  selector: 'LoginComponent'
+  selector: 'login-component'
 })
 
 export class LoginComponent {
@@ -51,7 +54,7 @@ export class LoginComponent {
     password: ['', Validators.required]
   })
 
-  constructor(public fb: FormBuilder, public http: HttpClient, public state: State,
+  constructor(public fb: FormBuilder, public http: HttpClient, public state: State, private jwtService: JwtService,
               public toastController: ToastController, private router: Router, private tokenService: TokenService) {
   }
 
@@ -60,11 +63,9 @@ export class LoginComponent {
       const response =
         await firstValueFrom(this.http.put<ResponseDto<string>>(environment.baseURL + '/api/checkPassword', this.loginForm.getRawValue()));
 
-      //Username: McFartimus, Password: fartington
       if (response.responseData != null) {
         this.onSuccessfulLogin(response.responseData)
-      }
-      else {
+      } else {
         const toast = await this.toastController.create({
           message: "Wrong username or password!",
           duration: 4500,
@@ -86,12 +87,23 @@ export class LoginComponent {
 
 
   }
-  onSuccessfulLogin(token: string){
+
+  async onSuccessfulLogin(token: string) {
     const username = this.loginForm.getRawValue().username!.toString(); // Assuming your API response directly contains the token
 
     // Save the token to the local storage using your TokenService
     this.tokenService.saveToken(token);
-    this.router.navigate(['/bees-feed']);
+    const decodedToken = this.jwtService.decodeToken(token);
+    const rank = decodedToken ? decodedToken['rank'] : null;
+    if (rank > 0)
+      this.router.navigate(['/bees-feed']);
+    else {
+      var response = await firstValueFrom(
+        this.http.get<ResponseDto<Account[]>>(environment.baseURL + '/api/getAccounts/'));
+      this.state.accounts = response.responseData!;
+      this.router.navigate(['/accounts-component']);
+    }
+
   }
 
   focusPasswordInput() {

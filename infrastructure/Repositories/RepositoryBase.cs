@@ -81,7 +81,7 @@ public class RepositoryBase
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);//TODO: remove after development
-            return default(T);
+            throw new Exception("crap");
         }
     }
 

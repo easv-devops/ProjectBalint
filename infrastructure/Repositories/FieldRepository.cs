@@ -17,7 +17,6 @@ public class FieldRepository : RepositoryBase
     {
         return GetAllItems<FieldQuery>("field");
     }
-
     public int CreateField(string fieldName, string fieldLocation)
     {
         var parameters = new
@@ -29,6 +28,10 @@ public class FieldRepository : RepositoryBase
         return CreateItem<int>("field", parameters); //TODO: check if it works, fix if not
     }
 
+    public IEnumerable<Account_FieldQuery> GetAllAccountFieldConnections()
+    {
+        return GetAllItems<Account_FieldQuery>("account_field");
+    }
     public bool UpdateField(FieldQuery field)
     {
         return UpdateEntity("field", field, "id");
@@ -62,7 +65,6 @@ public class FieldRepository : RepositoryBase
             throw new Exception("No fields found for account id.");
         }
     }
-
     public bool ConnectFieldAndAccount(int accountId, int fieldId)
     {
         const string sql = $"INSERT INTO account_field (account_id, field_id) VALUES (@accountId, @fieldId)";

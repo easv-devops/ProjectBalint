@@ -1,4 +1,5 @@
-﻿using BeeProject.Filters;
+﻿using BeeProject.Config;
+using BeeProject.Filters;
 using BeeProject.TransferModels;
 using BeeProject.TransferModels.CreateRequests;
 using BeeProject.TransferModels.UpdateRequests;
@@ -18,39 +19,26 @@ public class AilmentController : ControllerBase
         _ailmentService = ailmentService;
     }
 
+    private bool IsUrlAllowed(string url) => Whitelist.AllowedUrls.Any(url.StartsWith);
+
+    private ResponseDto HandleInvalidRequest() => new ResponseDto { MessageToClient = "Invalid request.", ResponseData = null };
+
+    private ResponseDto ValidateAndProceed<T>(Func<T> action, string successMessage) =>
+        !IsUrlAllowed(Request.Headers["Referer"]) ? HandleInvalidRequest() : new ResponseDto { MessageToClient = $"Successfully {successMessage}.", ResponseData = action.Invoke() };
+
     [HttpGet]
     [Route("/api/getAilments")]
-    public ResponseDto GetAllAilments()
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully fetched all ailments.",
-            ResponseData = _ailmentService.GetAllAilments()
-        };
-    }
+    public ResponseDto GetAllAilments() => new ResponseDto { MessageToClient = "Successfully fetched all ailments.", ResponseData = _ailmentService.GetAllAilments() };
+
     [HttpGet]
     [Route("/api/getGlobalAilments")]
-    public ResponseDto GetGlobalAilments()
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully fetched all ailments.",
-            ResponseData = _ailmentService.GetGlobalAilments()
-        };
-    }
+    public ResponseDto GetGlobalAilments() => new ResponseDto { MessageToClient = "Successfully fetched all ailments.", ResponseData = _ailmentService.GetGlobalAilments() };
 
     [HttpPost]
     [ValidateModel]
     [Route("/api/createAilment")]
-    public ResponseDto CreateAilment([FromBody] CreateAilmentRequestDto dto)
-    {
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully created a ailment.",
-            ResponseData = _ailmentService.CreateAilment(dto.Hive_Id, dto.Name,
-                (AilmentSeverity)Enum.ToObject(typeof(AilmentSeverity), dto.Severity), dto.Solved, dto.Comment!)
-        };
-    }
+    public ResponseDto CreateAilment([FromBody] CreateAilmentRequestDto dto) =>
+        new ResponseDto { MessageToClient = "Successfully created an ailment.", ResponseData = _ailmentService.CreateAilment(dto.Hive_Id, dto.Name, (AilmentSeverity)Enum.ToObject(typeof(AilmentSeverity), dto.Severity), dto.Solved, dto.Comment!) };
 
     [HttpPut]
     [ValidateModel]
@@ -67,10 +55,7 @@ public class AilmentController : ControllerBase
             Solved = dto.Solved
         };
         _ailmentService.UpdateAilment(ailment);
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully updated ailment."
-        };
+        return new ResponseDto { MessageToClient = "Successfully updated ailment." };
     }
 
     //TODO: change to safe later
@@ -79,9 +64,6 @@ public class AilmentController : ControllerBase
     public ResponseDto DeleteAilment([FromRoute] int id)
     {
         _ailmentService.DeleteAilment(id);
-        return new ResponseDto()
-        {
-            MessageToClient = "Successfully deleted ailment."
-        };
+        return new ResponseDto { MessageToClient = "Successfully deleted ailment." };
     }
 }

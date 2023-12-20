@@ -10,12 +10,12 @@ public class CreateHiveRequestDto
 
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     [RegularExpression(@"^\d{4}-\d{2}-\d{2}$",
-        ErrorMessage = "Invalid timestamp format. Use dd-MM-yyyy.")]
+        ErrorMessage = "Invalid timestamp format. Use yyyy-MM-dd.")]
     public string PlacementDate { get; set; }
 
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
     [RegularExpression(@"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$",
-        ErrorMessage = "Invalid timestamp format. Use dd-MM-yyyy HH:mm:ss.")]
+        ErrorMessage = "Invalid timestamp format. Use yyyy-MM-dd HH:mm:ss.")]
     public string LastCheck { get; set; }
 
     public bool ReadyToHarvest { get; set; }

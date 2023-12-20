@@ -25,7 +25,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-:root{
+:root {
   --yellow-color: #E0C327;
   --white-color: #D9D9D9;
   --red-color: #BC1E1E;
@@ -36,4 +36,84 @@
   --dark-yellow: #F6AA00;
   --effect-color: #FCD000;
   --green-color: #2dd36f;
+}
+
+ion-modal.custom-field-modal::part(content) {
+  --height: 280px;
+  position: absolute;
+  top: 35%;
+  --width: 700px;
+  border-radius: 25px;
+  display: block;
+}
+ion-modal.custom-hive-modal::part(content) {
+  --height: 540px;
+  position: absolute;
+  top: 25%;
+  --width: 700px;
+  border-radius: 25px;
+  display: block;
+}
+ion-modal.custom-edit-hive-modal::part(content) {
+  --height: 745px;
+  position: absolute;
+  top: 15%;
+  --width: 700px;
+  border-radius: 25px;
+  display: block;
+}
+ion-modal.custom-create-account-modal::part(content) {
+  --height: 225px;
+  position: absolute;
+  top: 15%;
+  --width: 700px;
+  border-radius: 25px;
+  display: block;
+}
+ion-modal.custom-rank-modal::part(content) {
+  --height: 270px;
+  position: absolute;
+  top: 15%;
+  --width: 700px;
+  border-radius: 25px;
+  display: block;
+}
+
+#add-button {
+  height: 65px;
+  width: 65px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  font-size: 36px;
+  border-radius: 100px;
+  color: var(--black-color);
+  background-color: var(--white-color);
+  transition: .2s;
+}
+#add-button:hover {
+  background-color: var(--yellow-color);
+  transform: translateY(-2px) translateX(-2px);
+}
+
+#add-button:active {
+  transform: translateY(2px) translateX(2px);
+  background-color: var(--dark-color);
+  color: var(--white-color);
+}
+#back-button {
+  cursor: pointer;
+  color: var(--red-color);
+  font-weight: bold;
+  width: 80px;
+  transition: .2s;
+  user-select: none;
+}
+
+#back-button:hover {
+  transform: translateY(-2px) translateX(-2px);
+}
+
+#back-button:active {
+  transform: translateY(2px) translateX(2px);
 }
